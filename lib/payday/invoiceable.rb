@@ -46,7 +46,7 @@ module Payday::Invoiceable
 
   # Calculates the total for this invoice.
   def total
-    subtotal + tax + shipping
+    subtotal - credit + tax + shipping
   end
 
   def overdue?
@@ -59,6 +59,10 @@ module Payday::Invoiceable
 
   def paid?
     defined?(paid_at) && !!paid_at
+  end
+
+  def prepaid?
+    subtotal - credit == 0
   end
 
   # Renders this invoice to pdf as a string

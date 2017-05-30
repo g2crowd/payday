@@ -10,6 +10,7 @@ zh-CN:
       due_date: "过期日期:"
       paid_date: "支付日期:"
       subtotal: "小计:"
+      credit: "信用:"
       shipping: "邮费:"
       tax: "税费:"
       total: "总计:"

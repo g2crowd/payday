@@ -12,6 +12,7 @@ de:
       due_date: "Fälligkeit:"
       paid_date: "Zahlungsdatum:"
       subtotal: "Zwischensumme:"
+      credit: "Kredit:"
       shipping: "Versand:"
       tax: "Steuern:"
       total: "Gesamt:"

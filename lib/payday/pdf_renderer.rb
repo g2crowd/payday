@@ -34,14 +34,15 @@ module Payday
     end
 
     def self.stamp(invoice, pdf)
-      stamp = nil
-      if invoice.refunded?
-        stamp = I18n.t "payday.status.refunded", default: "REFUNDED"
-      elsif invoice.paid?
-        stamp = I18n.t "payday.status.paid", default: "PAID"
-      elsif invoice.overdue?
-        stamp = I18n.t "payday.status.overdue", default: "OVERDUE"
-      end
+      stamp = if invoice.refunded?
+                I18n.t "payday.status.refunded", default: "REFUNDED"
+              elsif invoice.prepaid?
+                I18n.t "payday.status.prepaid", default: "PREPAID"
+              elsif invoice.paid?
+                I18n.t "payday.status.paid", default: "PAID"
+              elsif invoice.overdue?
+                I18n.t "payday.status.overdue", default: "OVERDUE"
+              end
 
       if stamp
         pdf.bounding_box([150, pdf.cursor - 50], width: pdf.bounds.width - 300) do
@@ -151,7 +152,7 @@ module Payday
       end
 
       # Paid on
-      if defined?(invoice.paid_at) && invoice.paid_at
+      if defined?(invoice.paid_at) && invoice.paid_at && !invoice.prepaid?
         if invoice.paid_at.is_a?(Date) || invoice.paid_at.is_a?(Time)
           paid_date = invoice.paid_at.strftime(Payday::Config.default.date_format)
         else
@@ -221,6 +222,13 @@ module Payday
         bold_cell(pdf, I18n.t("payday.invoice.subtotal", default: "Subtotal:")),
         cell(pdf, number_to_currency(invoice.subtotal, invoice), align: :right)
       ]
+
+      if invoice.credit > 0
+        table_data << [
+          bold_cell(pdf, I18n.t("payday.invoice.credit", default: "Credit:")),
+          cell(pdf, number_to_currency(-invoice.credit, invoice), align: :right)
+        ]
+      end
 
       if invoice.tax_rate > 0
         if invoice.tax_description.nil?
@@ -303,7 +311,7 @@ module Payday
       currency = Money::Currency.wrap(invoice_or_default(invoice, :currency))
       number *= currency.subunit_to_unit
       number = number.round unless Money.infinite_precision
-      Money.new(number, currency).format
+      Money.new(number, currency).format(sign_before_symbol: true)
     end
 
     def self.max_cell_width(cell_proxy)

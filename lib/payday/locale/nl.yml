@@ -11,6 +11,7 @@ nl:
       due_date: "Te betalen voor:"
       paid_date: "Betaald op:"
       subtotal: "Subtotaal:"
+      credit: "Credit:"
       shipping: "Levering:"
       tax: "Btw:"
       total: "Totaal:"

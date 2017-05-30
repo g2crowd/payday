@@ -10,6 +10,7 @@ fr:
       due_date: "Paiment dû le:"
       paid_date: "Payé le:"
       subtotal: "Sous-total:"
+      credit: "Crédit:"
       shipping: "Livraison:"
       tax: "Taxe:"
       total: "Total:"
