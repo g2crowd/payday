@@ -6,6 +6,8 @@ require "prawn"
 require "prawn-svg"
 require "money"
 
+Money.locale_backend = :currency
+
 require_relative "payday/version"
 require_relative "payday/config"
 require_relative "payday/i18n"
